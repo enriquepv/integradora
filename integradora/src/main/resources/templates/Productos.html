@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Productos</title>
+    <link rel="stylesheet" th:href="@{/css/Productos.css}">
+</head>
+<body>
+<h2>Añadir Producto</h2>
+<form id="formProducto">
+    <label for="descripcion">Descripción:</label><br>
+    <input type="text" id="descripcion" name="descripcion"><br>
+    <span class="error" id="errorDescripcion"></span><br>
+
+    <label for="precio">Precio:</label><br>
+    <input type="text" id="precio" name="precio"><br>
+    <span class="error" id="errorPrecio"></span><br>
+
+    <label for="materiales">Materiales (separados por comas):</label><br>
+    <input type="text" id="materiales" name="materiales"><br>
+    <span class="error" id="errorMateriales"></span><br>
+
+    <label for="categoria">Categoría:</label><br>
+    <input type="text" id="categoria" name="categoria"><br>
+    <span class="error" id="errorCategoria"></span><br>
+
+    <label for="dimensiones">Dimensiones (formato clave:valor, separados por comas):</label><br>
+    <input type="text" id="dimensiones" name="dimensiones"><br>
+    <span class="error" id="errorDimensiones"></span><br>
+
+    <h3>Campos Adicionales</h3>
+    <div id="camposAdicionales"></div>
+    <button type="button" onclick="agregarCampo()">Agregar Campo</button><br>
+
+    <input type="submit" value="Añadir Producto">
+</form>
+
+<h1>Productos</h1>
+<table id="productos">
+    <tr>
+        <th>ID</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+    </tr>
+</table>
+
+<script>
+    const apiURLListado = 'http://localhost:8080/producto/listado';
+    const apiURLAñadir = 'http://localhost:8080/producto/añadir';
+    const apiURLEliminar = 'http://localhost:8080/producto/eliminar/';
+
+    document.getElementById('formProducto').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const errores = validarFormulario();
+        if (Object.keys(errores).length > 0) {
+            mostrarErrores(errores);
+            return;
+        }
+
+        const nuevoProducto = {
+            descripcion: document.getElementById('descripcion').value,
+            precio: parseFloat(document.getElementById('precio').value),
+            materiales: document.getElementById('materiales').value.split(',').map(item => item.trim()),
+            categoria: document.getElementById('categoria').value,
+            dimensiones: Object.fromEntries(document.getElementById('dimensiones').value.split(',').map(pair => pair.split(':').map(item => item.trim()))),
+            camposAdicionales: obtenerCamposAdicionales()
+        };
+
+        fetch(apiURLAñadir, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(nuevoProducto),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Producto añadido:', data);
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
+    function obtenerCamposAdicionales() {
+        const camposAdicionales = {};
+        document.querySelectorAll('#camposAdicionales .campo-adicional').forEach(div => {
+            const key = div.querySelector('.nombreCampo').value.trim();
+            const value = div.querySelector('.valorCampo').value.trim();
+            try {
+                camposAdicionales[key] = JSON.parse(value);
+            } catch (e) {
+                camposAdicionales[key] = value;
+            }
+        });
+        return camposAdicionales;
+    }
+
+    function agregarCampo() {
+        const contenedor = document.getElementById('camposAdicionales');
+        const nuevoCampo = document.createElement('div');
+        nuevoCampo.className = 'campo-adicional';
+        nuevoCampo.innerHTML = `
+            <label>Nombre del Campo:</label>
+            <input type="text" class="nombreCampo"><br>
+            <label>Valor del Campo:</label>
+            <input type="text" class="valorCampo"><br>
+            <span class="error"></span><br>
+        `;
+        contenedor.appendChild(nuevoCampo);
+    }
+
+    function validarFormulario() {
+        const errores = {};
+        const descripcion = document.getElementById('descripcion').value.trim();
+        const precio = document.getElementById('precio').value.trim();
+        const materiales = document.getElementById('materiales').value.trim();
+        const categoria = document.getElementById('categoria').value.trim();
+        const dimensiones = document.getElementById('dimensiones').value.trim();
+
+        if (descripcion === '') {
+            errores.descripcion = 'La descripción es obligatoria.';
+        }
+
+        if (precio === '' || isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
+            errores.precio = 'El precio debe ser un número positivo.';
+        }
+
+        if (materiales === '') {
+            errores.materiales = 'Los materiales son obligatorios.';
+        }
+
+        if (categoria === '') {
+            errores.categoria = 'La categoría es obligatoria.';
+        }
+
+        const dimensionesRegex = /^(\w+:\w+)(,\w+:\w+)*$/;
+        if (dimensiones === '' || !dimensionesRegex.test(dimensiones)) {
+            errores.dimensiones = 'Las dimensiones deben estar en el formato clave:valor, separadas por comas.';
+        }
+
+        const camposAdicionales = document.querySelectorAll('#camposAdicionales .campo-adicional');
+        camposAdicionales.forEach((campo, index) => {
+            const nombreCampo = campo.querySelector('.nombreCampo').value.trim();
+            const valorCampo = campo.querySelector('.valorCampo').value.trim();
+            const errorSpan = campo.querySelector('.error');
+
+            if (nombreCampo === '' || valorCampo === '') {
+                errorSpan.textContent = 'Nombre y valor del campo son obligatorios.';
+                errores[`campoAdicional${index}`] = 'Nombre y valor del campo son obligatorios.';
+            } else {
+                errorSpan.textContent = '';
+            }
+        });
+
+        return errores;
+    }
+
+    function mostrarErrores(errores) {
+        document.getElementById('errorDescripcion').textContent = errores.descripcion || '';
+        document.getElementById('errorPrecio').textContent = errores.precio || '';
+        document.getElementById('errorMateriales').textContent = errores.materiales || '';
+        document.getElementById('errorCategoria').textContent = errores.categoria || '';
+        document.getElementById('errorDimensiones').textContent = errores.dimensiones || '';
+
+        const camposAdicionales = document.querySelectorAll('#camposAdicionales .campo-adicional');
+        camposAdicionales.forEach((campo, index) => {
+            const errorSpan = campo.querySelector('.error');
+            errorSpan.textContent = errores[`campoAdicional${index}`] || '';
+        });
+    }
+
+    function eliminarProducto(id) {
+        const confirmacion = confirm('¿Estás seguro de que deseas eliminar este producto?');
+        if (confirmacion) {
+            fetch(apiURLEliminar + id, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Producto eliminado');
+                        location.reload();
+                    } else {
+                        console.error('Error al eliminar el producto');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+
+
+    fetch(apiURLListado)
+        .then(response => response.json())
+        .then(productos => {
+            const tablaProductos = document.getElementById('productos');
+            productos.forEach(producto => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${producto.id}</td>
+                    <td>${producto.descripcion}</td>
+                    <td>${producto.precio}</td>
+                    <td>${producto.categoria}</td>
+                    <td><button onclick="eliminarProducto('${producto.id}')">Eliminar</button></td>
+                `;
+                tablaProductos.appendChild(fila);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+</body>
+</html>
+

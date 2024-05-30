@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración</title>
+    <link rel="stylesheet" th:href="@{/css/Usuarios.css}">
+</head>
+<body>
+<h1>Administración</h1>
+
+<!-- Formulario para bloquear/desbloquear usuarios -->
+<h2>Bloquear/Desbloquear Usuario</h2>
+<form id="blockForm">
+    <label for="blockUsername">Nombre de Usuario:</label>
+    <input type="text" id="blockUsername" name="blockUsername">
+    <label for="blockReason">Motivo:</label>
+    <input type="text" id="blockReason" name="blockReason">
+    <button type="submit" id="blockBtn">Bloquear</button>
+    <button type="button" id="unblockBtn">Desbloquear</button>
+</form>
+
+<!-- Formulario para dar de baja/quitar baja a un usuario -->
+<h2>Dar de Baja/Quitar Baja Usuario</h2>
+<form id="deactivateForm">
+    <label for="deactivateUsername">Nombre de Usuario:</label>
+    <input type="text" id="deactivateUsername" name="deactivateUsername">
+    <button type="submit" id="deactivateBtn">Dar de Baja</button>
+    <button type="button" id="reactivateBtn">Quitar Baja</button>
+</form>
+
+<!-- Tabla de usuarios -->
+<h2>Lista de Usuarios</h2>
+<table id="userTable">
+    <thead>
+    <tr>
+        <th>Nombre de Usuario</th>
+        <th>Estado de Bloqueo</th>
+        <th>Motivo de bloqueo</th>
+        <th>Baja Lógica</th>
+        <th>Contador de inicios de sesion</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Los datos de los usuarios se cargarán dinámicamente aquí -->
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        loadUsers(); // Cargar usuarios al cargar la página
+
+        // Manejador de evento para el formulario de bloqueo
+        $("#blockForm").submit(function(event) {
+            event.preventDefault(); // Evitar el envío del formulario por defecto
+
+            // Obtener los valores del formulario
+            var email = $("#blockUsername").val();
+            var isBlocked = true;
+            var motivoBloqueo = $("#blockReason").val();
+
+            // Realizar solicitud Ajax para bloquear usuario
+            $.ajax({
+                url: "/api/bloquear-usuario",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email, bloqueado: isBlocked, motivoBloqueo: motivoBloqueo }),
+                success: function(response) {
+                    alert("Usuario bloqueado con éxito");
+                    loadUsers(); // Recargar la lista de usuarios
+                },
+                error: function(xhr, status, error) {
+                    alert("Error al procesar la solicitud: " + error);
+                }
+            });
+        });
+
+        // Manejador de evento para el botón de desbloqueo
+        $("#unblockBtn").click(function() {
+            var email = $("#blockUsername").val();
+            var isBlocked = false;
+            var motivoBloqueo = $("#blockReason").val();
+
+            // Realizar solicitud Ajax para desbloquear usuario
+            $.ajax({
+                url: "/api/bloquear-usuario",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email, bloqueado: isBlocked, motivoBloqueo: motivoBloqueo }),
+                success: function(response) {
+                    alert("Usuario desbloqueado con éxito");
+                    loadUsers(); // Recargar la lista de usuarios
+                },
+                error: function(xhr, status, error) {
+                    alert("Error al procesar la solicitud: " + error);
+                }
+            });
+        });
+
+        // Manejador de evento para el formulario de dar de baja
+        $("#deactivateForm").submit(function(event) {
+            event.preventDefault(); // Evitar el envío del formulario por defecto
+
+            var email = $("#deactivateUsername").val();
+
+            // Realizar solicitud Ajax para dar de baja al usuario
+            $.ajax({
+                url: "/api/dar-baja-usuario",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email }),
+                success: function(response) {
+                    alert("Usuario dado de baja con éxito");
+                    loadUsers(); // Recargar la lista de usuarios
+                },
+                error: function(xhr, status, error) {
+                    alert("Error al procesar la solicitud: " + error);
+                }
+            });
+        });
+
+        // Manejador de evento para el botón de quitar baja
+        $("#reactivateBtn").click(function() {
+            var email = $("#deactivateUsername").val();
+
+            // Realizar solicitud Ajax
+            $.ajax({
+                url: "/api/quitar-baja-usuario",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email }),
+                success: function(response) {
+                    alert("Baja lógica quitada con éxito");
+                    loadUsers(); // Recargar la lista de usuarios
+                },
+                error: function(xhr, status, error) {
+                    alert("Error al procesar la solicitud: " + error);
+                }
+            });
+        });
+
+        // Función para cargar la lista de usuarios
+        function loadUsers() {
+            // Realizar solicitud Ajax para obtener la lista de usuarios
+            $.ajax({
+                url: "/api/usuarios",
+                method: "GET",
+                success: function(users) {
+                    // Limpiar la tabla
+                    $("#userTable tbody").empty();
+
+                    // Agregar usuarios a la tabla
+                    users.forEach(function(user) {
+                        var row = "<tr>";
+                        row += "<td>" + user.email + "</td>"; // Asumiendo que el objeto de usuario tiene una propiedad 'email'
+                        row += "<td class='" + (user.bloqueado ? "blocked" : "unblocked") + "'>" + (user.bloqueado ? "Bloqueado" : "Desbloqueado") + "</td>"; // Asignando clases 'blocked' y 'unblocked'
+                        row += "<td>" + user.motivoBloqueo + "</td>";
+                        row += "<td class='" + (user.bajaLogica ? "baja" : "no-baja") + "'>" + (user.bajaLogica ? "Sí" : "No") + "</td>"; // Asignando clases 'baja' y 'no-baja'
+                        row += "<td>" + getCookieValue("numeroDeInicios", user.email) + "</td>"; // Obtener contador de inicio de sesión por email
+                        row += "</tr>";
+                        $("#userTable tbody").append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    alert("Error al obtener la lista de usuarios: " + error);
+                }
+            });
+        }
+
+        // Función para obtener el valor de una cookie específica por nombre de usuario
+        function getCookieValue(cookieName, username) {
+            var name = cookieName + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) == 0) {
+                    var value = cookie.substring(name.length);
+                    var userCookies = value.split('#');
+                    for (var j = 0; j < userCookies.length; j++) {
+                        var pair = userCookies[j].split(':');
+                        if (pair[0] === username) {
+                            return pair[1];
+                        }
+                    }
+                }
+            }
+            return "0"; // Retornar un valor por defecto si no se encuentra el contador
+        }
+    });
+</script>
+
+</body>
+</html>

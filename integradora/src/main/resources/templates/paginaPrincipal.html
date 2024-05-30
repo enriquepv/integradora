@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Principal - Tienda Online</title>
+  <link rel="stylesheet" th:href="@{/css/paginaPrincipal.css}">
+</head>
+<body>
+<header class="header">
+  <div class="header-container">
+    <h1>Woda sports</h1>
+    <nav class="header-buttons">
+      <div th:if="${session.usuario == null}">
+        <a href="/login/login_paso1">Login</a>
+        <a href="/register/registro_paso1">Registro</a>
+      </div>
+      <div th:if="${session.usuario != null}">
+        <a href="/login/logout" style="background-color: red">Logout</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="catalog section">
+    <h2>Catálogo</h2>
+    <div id="catalogo" class="catalog-items">
+      <!-- Aquí se cargarán dinámicamente los productos -->
+    </div>
+  </section>
+  <section class="about-us section">
+    <h2>¿Quiénes Somos?</h2>
+    <p>Somos una tienda dedicada a ofrecer los mejores productos a nuestros clientes. Nuestra misión es proporcionar una experiencia de compra excepcional a través de un servicio al cliente de alta calidad y una selección de productos cuidadosamente seleccionados.</p>
+  </section>
+</main>
+<footer>
+  <p>&copy; 2024 Tienda Online. Todos los derechos reservados.</p>
+</footer>
+
+<!-- Añadir lógica para mostrar el mensaje flash -->
+<script th:inline="javascript">
+  /* Verificar si hay un mensaje flash y mostrar la alerta */
+  /* Thymeleaf manejará la lógica para mostrar el mensaje si existe */
+  let message = [[${message}]];
+
+  if (message) {
+    alert(message);
+  }
+</script>
+
+<!-- Importar biblioteca Axios para hacer peticiones HTTP -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Script para cargar productos mediante AJAX -->
+<script th:inline="javascript">
+  // URL del endpoint para obtener el listado de productos
+  const apiURLListadoProductos = '/producto/listado';
+
+  // Función para cargar los productos mediante AJAX
+  function cargarProductos() {
+    axios.get(apiURLListadoProductos)
+            .then(response => {
+              const productos = response.data;
+              const catalogoDiv = document.getElementById('catalogo');
+              catalogoDiv.innerHTML = ''; // Limpiar contenido previo del catálogo
+
+              productos.forEach(producto => {
+                const catalogoItem = document.createElement('div');
+                catalogoItem.classList.add('catalog-item');
+                catalogoItem.innerHTML = `
+                        <h3>${producto.descripcion}</h3>
+                        <p>Precio: $${producto.precio}</p>
+                    `;
+                catalogoDiv.appendChild(catalogoItem);
+              });
+            })
+            .catch(error => {
+              console.error('Error al cargar productos:', error);
+            });
+  }
+
+  // Llamar a la función para cargar productos al cargar la página
+  document.addEventListener('DOMContentLoaded', cargarProductos);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/LoginPaso1.css}">
+</head>
+<body>
+
+<div th:replace="~{/fragments/header.html}"></div>
+
+
+<main>
+    <div class="content">
+        <h2>Inicio de Usuario</h2>
+
+        <!-- Mostrar mensaje de error si existe -->
+        <div th:if="${error}" class="error">
+            <p class="required" th:text="${error}"></p>
+        </div>
+
+
+        <form action="/login/login_paso1" method="post" id="registroForm" th:object="${usuario}">
+
+            <div class="form-group">
+                <label for="email">Dirección de correo electrónico: <span class="required">*</span></label>
+                <input type="text" th:field="*{email}">
+                <span class="required" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+
+            </div>
+
+            <input type="submit" value="Siguiente">
+        </form>
+        <a href="/register/registro_paso1" id="registrarse">¿No tienes cuenta? Regístrate</a>
+
+
+    </div>
+</main>
+
+<div th:replace="~{/fragments/footer.html}"></div>
+
+</body>
+</html>

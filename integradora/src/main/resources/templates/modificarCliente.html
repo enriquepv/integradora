@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Cliente</title>
+    <link rel="stylesheet" th:href="@{/css/Cliente.css}">
+</head>
+<body>
+<h1>Detalle de Cliente</h1>
+<form id="formDetalleCliente">
+    <input type="hidden" id="idCliente" name="idCliente">
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre">
+
+    <label for="apellidos">Apellidos:</label>
+    <input type="text" id="apellidos" name="apellidos">
+
+    <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+    <input type="text" id="fechaNacimiento" name="fechaNacimiento">
+
+    <label for="genero">Género:</label>
+    <select id="genero" name="genero">
+        <option value="MASCULINO">Masculino</option>
+        <option value="FEMENINO">Femenino</option>
+        <option value="OTRO">Otro</option>
+    </select>
+
+    <label for="paisNacimiento">País de Nacimiento:</label>
+    <input type="text" id="paisNacimiento" name="paisNacimiento">
+
+    <label for="tipoDocumentoCliente">Tipo de Documento:</label>
+    <select id="tipoDocumentoCliente" name="tipoDocumentoCliente">
+        <option value="DNI">DNI</option>
+        <option value="PASAPORTE">Pasaporte</option>
+        <option value="NIE">NIE</option>
+    </select>
+
+    <label for="documento">Documento:</label>
+    <input type="text" id="documento" name="documento">
+
+    <label for="telefonoMovil">Teléfono Móvil:</label>
+    <input type="text" id="telefonoMovil" name="telefonoMovil">
+
+    <label for="comentarios">Comentarios:</label>
+    <textarea id="comentarios" name="comentarios"></textarea>
+
+    <label for="aceptaLicencia">Acepta Licencia:</label>
+    <input type="checkbox" id="aceptaLicencia" name="aceptaLicencia">
+
+    <label for="fechaAlta">Fecha de Alta:</label>
+    <input type="text" id="fechaAlta" name="fechaAlta" disabled>
+
+    <!-- Direccion -->
+    <h3>Dirección</h3>
+    <label for="tipoVia">Tipo de Vía:</label>
+    <input type="text" id="tipoVia" name="direccion.tipoVia">
+
+    <label for="numero">Número:</label>
+    <input type="text" id="numero" name="direccion.numero">
+
+    <label for="portal">Portal:</label>
+    <input type="text" id="portal" name="direccion.portal">
+
+    <label for="planta">Planta:</label>
+    <input type="text" id="planta" name="direccion.planta">
+
+    <label for="puerta">Puerta:</label>
+    <input type="text" id="puerta" name="direccion.puerta">
+
+    <label for="localidad">Localidad:</label>
+    <input type="text" id="localidad" name="direccion.localidad">
+
+    <label for="region">Región:</label>
+    <input type="text" id="region" name="direccion.region">
+
+    <label for="codigoPostal">Código Postal:</label>
+    <input type="text" id="codigoPostal" name="direccion.codigoPostal">
+
+    <!-- Direccion Envio -->
+    <h3>Dirección de Envío</h3>
+    <label for="tipoViaEnvio">Tipo de Vía:</label>
+    <input type="text" id="tipoViaEnvio" name="direccionEnvio.tipoVia">
+
+    <label for="numeroEnvio">Número:</label>
+    <input type="text" id="numeroEnvio" name="direccionEnvio.numero">
+
+    <label for="portalEnvio">Portal:</label>
+    <input type="text" id="portalEnvio" name="direccionEnvio.portal">
+
+    <label for="plantaEnvio">Planta:</label>
+    <input type="text" id="plantaEnvio" name="direccionEnvio.planta">
+
+    <label for="puertaEnvio">Puerta:</label>
+    <input type="text" id="puertaEnvio" name="direccionEnvio.puerta">
+
+    <label for="localidadEnvio">Localidad:</label>
+    <input type="text" id="localidadEnvio" name="direccionEnvio.localidad">
+
+    <label for="regionEnvio">Región:</label>
+    <input type="text" id="regionEnvio" name="direccionEnvio.region">
+
+    <label for="codigoPostalEnvio">Código Postal:</label>
+    <input type="text" id="codigoPostalEnvio" name="direccionEnvio.codigoPostal">
+
+    <!-- Información de Usuario -->
+
+    <select id="bajaLogica" name="usuario.bajaLogica" hidden="hidden">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+    </select>
+
+
+    <select id="bloqueado" name="usuario.bloqueado" hidden="hidden">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+    </select>
+
+    <button type="button" onclick="guardarCliente()">Guardar</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var clienteId = window.location.pathname.split('/').pop(); // Obtener el ID del cliente de la URL
+        cargarDetalleCliente(clienteId);
+    });
+
+    function cargarDetalleCliente(clienteId) {
+        $.ajax({
+            url: '/api/clientes/' + clienteId,
+            method: 'GET',
+            dataType: 'json',
+            success: function(cliente) {
+                $('#idCliente').val(cliente.idCliente);
+                $('#nombre').val(cliente.nombre);
+                $('#apellidos').val(cliente.apellidos);
+                $('#fechaNacimiento').val(cliente.fechaNacimiento);
+                $('#genero').val(cliente.genero);
+                $('#paisNacimiento').val(cliente.paisNacimiento);
+                $('#tipoDocumentoCliente').val(cliente.tipoDocumentoCliente);
+                $('#documento').val(cliente.documento);
+                $('#telefonoMovil').val(cliente.telefonoMovil);
+                $('#comentarios').val(cliente.comentarios);
+                $('#aceptaLicencia').prop('checked', cliente.aceptaLicencia);
+                $('#fechaAlta').val(cliente.fechaAlta);
+
+                // Dirección
+                $('#tipoVia').val(cliente.direccion.tipoVia);
+                $('#numero').val(cliente.direccion.numero);
+                $('#portal').val(cliente.direccion.portal);
+                $('#planta').val(cliente.direccion.planta);
+                $('#puerta').val(cliente.direccion.puerta);
+                $('#localidad').val(cliente.direccion.localidad);
+                $('#region').val(cliente.direccion.region);
+                $('#codigoPostal').val(cliente.direccion.codigoPostal);
+
+                // Dirección de Envío
+                $('#tipoViaEnvio').val(cliente.direccionEnvio.tipoVia);
+                $('#numeroEnvio').val(cliente.direccionEnvio.numero);
+                $('#portalEnvio').val(cliente.direccionEnvio.portal);
+                $('#plantaEnvio').val(cliente.direccionEnvio.planta);
+                $('#puertaEnvio').val(cliente.direccionEnvio.puerta);
+                $('#localidadEnvio').val(cliente.direccionEnvio.localidad);
+                $('#regionEnvio').val(cliente.direccionEnvio.region);
+                $('#codigoPostalEnvio').val(cliente.direccionEnvio.codigoPostal);
+
+                // Información de Usuario
+                $('#bajaLogica').val(cliente.usuario.bajaLogica ? 'true' : 'false');
+                $('#bloqueado').val(cliente.usuario.bloqueado ? 'true' : 'false');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al cargar el detalle del cliente:', error);
+            }
+        });
+    }
+
+    function guardarCliente() {
+        var clienteData = {
+            idCliente: $('#idCliente').val(),
+            nombre: $('#nombre').val(),
+            apellidos: $('#apellidos').val(),
+            fechaNacimiento: $('#fechaNacimiento').val(),
+            genero: $('#genero').val(),
+            paisNacimiento: $('#paisNacimiento').val(),
+            tipoDocumentoCliente: $('#tipoDocumentoCliente').val(),
+            documento: $('#documento').val(),
+            telefonoMovil: $('#telefonoMovil').val(),
+            comentarios: $('#comentarios').val(),
+            aceptaLicencia: $('#aceptaLicencia').is(':checked'),
+            direccion: {
+                tipoVia: $('#tipoVia').val(),
+                numero: $('#numero').val(),
+                portal: $('#portal').val(),
+                planta: $('#planta').val(),
+                puerta: $('#puerta').val(),
+                localidad: $('#localidad').val(),
+                region: $('#region').val(),
+                codigoPostal: $('#codigoPostal').val()
+            },
+            direccionEnvio: {
+                tipoVia: $('#tipoViaEnvio').val(),
+                numero: $('#numeroEnvio').val(),
+                portal: $('#portalEnvio').val(),
+                planta: $('#plantaEnvio').val(),
+                puerta: $('#puertaEnvio').val(),
+                localidad: $('#localidadEnvio').val(),
+                region: $('#regionEnvio').val(),
+                codigoPostal: $('#codigoPostalEnvio').val()
+            },
+            usuario: {
+                bajaLogica: $('#bajaLogica').val() === 'true',
+                bloqueado: $('#bloqueado').val() === 'true'
+            }
+        };
+
+        $.ajax({
+            url: '/api/clientes/' + clienteData.idCliente,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(clienteData),
+            success: function(response) {
+                alert('Cliente actualizado con éxito');
+            },
+            error: function(xhr, status, error) {
+                alert('Error al actualizar cliente: ' + xhr.responseText);
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
+
+</script>
+</body>
+</html>

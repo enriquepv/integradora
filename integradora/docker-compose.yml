@@ -1,0 +1,70 @@
+services:
+  tomcat:
+    container_name: contiene_tomcat
+    networks:
+      red_integradora:
+        ipv4_address: 172.19.0.4
+    build: ./pruebaTomcat
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+
+
+
+  mysql:
+    container_name: contiene_mysql
+    networks:
+      red_integradora:
+        ipv4_address: 172.19.0.3
+    ports:
+      - "3307:3306"
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: integradora_grupo
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  mongo:
+    container_name: contiene_mongo
+    networks:
+      red_integradora:
+        ipv4_address: 172.19.0.2
+    ports:
+      - "27017:27017"
+    image: mongo:4.4.6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: alumno
+
+    volumes:
+      - ./pruebaTomcat/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+
+  nodejs:
+    container_name: contiene_nodejs
+    networks:
+      red_integradora:
+        ipv4_address: 172.19.0.5
+    build: ./PracticaIntegradoraVue
+    ports:
+      - "5173:5173"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+
+
+networks:
+  red_integradora:
+    name: red_integradora
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16

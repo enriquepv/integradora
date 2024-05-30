@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    text-align: center;
+}
+.button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    cursor: pointer;
+    margin: 8px;
+    transition: background-color 0.3s ease;
+}
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para tablet */
+@media only screen and (max-width: 968px) {
+    .container {
+        padding: 0 10px; /* Ajuste adicional para tablet */
+    }
+    .button {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
+
+/* Estilos para dispositivos móviles */
+@media only screen and (max-width: 680px) {
+    .container {
+        padding: 0 5px; /* Ajuste adicional para dispositivos móviles */
+    }
+    .button {
+        font-size: 19px;
+        padding: 8px 16px;
+    }
+    h1 {
+        font-size: 44px; /* Tamaño de fuente más pequeño para títulos */
+    }
+    p {
+        font-size: 19px; /* Tamaño de fuente más pequeño para párrafos */
+        margin-bottom: 20px; /* Mayor espacio entre párrafos */
+    }
+}

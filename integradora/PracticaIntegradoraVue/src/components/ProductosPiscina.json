@@ -1,0 +1,23 @@
+[
+    {
+      "id": 1,
+      "nombre": "Gafas de natacion",
+      "precio": 15,
+      "descripcion": "Gafas para proteger los ojos",
+      "imagen": "src/assets/gafas_natacion.jpg"
+    },
+    {
+      "id": 2,
+      "nombre": "Gorro de latex",
+      "precio": 10,
+      "descripcion": "Gorro para piscina cubierta",
+      "imagen": "src/assets/gorro.jpg"
+    },
+    {
+      "id": 3,
+      "nombre": "Bañador slim",
+      "precio": 15,
+      "descripcion": "Un bañador ajustado, perfecto para competición o entrenamiento",
+      "imagen": "src/assets/banador.webp"
+    }
+  ]

@@ -1,0 +1,7 @@
+<table id = "userTable">
+    <tr th:each="usuario : ${listaUsuarios}">
+        <td th:text="${usuario.idUsuario}"></td>
+        <td th:text="${usuario.email}"></td>
+        <td th:text="${usuario.clave}"></td>
+    </tr>
+</table>

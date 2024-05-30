@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta y Lista de Clientes</title>
+  <link rel="stylesheet" th:href="@{/css/Cliente.css}">
+</head>
+<body>
+<form id="formBusquedaClientes">
+  <label for="fechaNacimientoDesde">Fecha de Nacimiento Desde:</label>
+  <input type="text" id="fechaNacimientoDesde" name="fechaNacimientoDesde" placeholder="YYYY-MM-DD">
+
+  <label for="fechaNacimientoHasta">Fecha de Nacimiento Hasta:</label>
+  <input type="text" id="fechaNacimientoHasta" name="fechaNacimientoHasta" placeholder="YYYY-MM-DD">
+
+  <label for="apellido">Apellido (patrón):</label>
+  <input type="text" id="apellido" name="apellido">
+
+  <label for="bajaLogica">¿Cliente de baja lógica?</label>
+  <select id="bajaLogica" name="bajaLogica">
+    <option value="">Seleccione...</option>
+    <option value="true">Sí</option>
+    <option value="false">No</option>
+  </select>
+
+  <label for="bloqueado">¿Usuario asociado bloqueado?</label>
+  <select id="bloqueado" name="bloqueado">
+    <option value="">Seleccione...</option>
+    <option value="true">Sí</option>
+    <option value="false">No</option>
+  </select>
+
+  <button type="button" id="buscarClientesBtn">Buscar Clientes</button>
+</form>
+
+<table id="tablaClientes">
+  <thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Fecha de Nacimiento</th>
+    <th>Apellidos</th>
+    <th>Baja de Usuario</th>
+    <th>Bloqueo de Usuario</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function cargarTodosLosClientes() {
+    $.ajax({
+      url: '/api/clientes',
+      method: 'GET',
+      dataType: 'json',
+      success: function(response) {
+        $('#tablaClientes tbody').empty(); // Limpiar contenido actual de la tabla
+        response.forEach(function(cliente) {
+          var estadoBaja = cliente.usuario.bajaLogica ? 'Sí' : 'No';
+          var estadoBloqueado = cliente.usuario.bloqueado ? 'Sí' : 'No';
+          var claseBaja = cliente.usuario.bajaLogica ? 'si' : 'no'; // Clase para el estado de baja lógica
+          var claseBloqueado = cliente.usuario.bloqueado ? 'si' : 'no'; // Clase para el estado de bloqueo
+          var row = '<tr>' +
+                  '<td><a href="cliente/' + cliente.idCliente + '">' + cliente.nombre + '</a></td>' +
+                  '<td>' + cliente.fechaNacimiento + '</td>' +
+                  '<td>' + cliente.apellidos + '</td>' +
+                  '<td class="' + claseBaja + '">' + estadoBaja + '</td>' +
+                  '<td class="' + claseBloqueado + '">' + estadoBloqueado + '</td>' +
+                  '<td><input type="hidden" class="idCliente" value="' + cliente.idCliente + '">' + // Campo oculto con ID del cliente
+                  '<button onclick="eliminarCliente(this)">Eliminar</button></td>' +
+                  '</tr>';
+          $('#tablaClientes tbody').append(row);
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error('Error al cargar clientes:', error);
+      }
+    });
+  }
+
+
+  function buscarClientes() {
+    var formData = {
+      fechaNacimientoDesde: $('#fechaNacimientoDesde').val(),
+      fechaNacimientoHasta: $('#fechaNacimientoHasta').val(),
+      apellido: $('#apellido').val(),
+      bajaLogica: $('#bajaLogica').val(),
+      bloqueado: $('#bloqueado').val()
+    };
+
+    $.ajax({
+      url: '/api/clientes/filtrados',
+      method: 'GET',
+      dataType: 'json',
+      data: formData,
+      success: function(response) {
+        $('#tablaClientes tbody').empty();
+        response.forEach(function(cliente) {
+          var claseBaja = cliente.usuario.bajaLogica ? 'si' : 'no'; // Clase para el estado de baja lógica
+          var claseBloqueado = cliente.usuario.bloqueado ? 'si' : 'no'; // Clase para el estado de bloqueo
+          var row = '<tr>' +
+                  '<td>' + cliente.nombre + '</td>' +
+                  '<td>' + cliente.fechaNacimiento + '</td>' +
+                  '<td>' + cliente.apellidos + '</td>' +
+                  '<td class="' + claseBaja + '">' + (cliente.usuario.bajaLogica ? 'Sí' : 'No') + '</td>' +
+                  '<td class="' + claseBloqueado + '">' + (cliente.usuario.bloqueado ? 'Sí' : 'No') + '</td>' +
+                  '<td><input type="hidden" class="idCliente" value="' + cliente.idCliente + '">' + // Campo oculto con ID del cliente
+                  '<button onclick="eliminarCliente(this)">Eliminar</button></td>' +
+                  '</tr>';
+          $('#tablaClientes tbody').append(row);
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error('Error al buscar clientes:', error);
+      }
+    });
+  }
+
+  function eliminarCliente(button) {
+    if (confirm('¿Está seguro de que desea eliminar este cliente?')) {
+      var idCliente = $(button).siblings('.idCliente').val(); // Obtener el ID del cliente desde el campo oculto
+      $.ajax({
+        url: '/api/clientes/' + idCliente,
+        method: 'DELETE',
+        success: function(response) {
+          alert('Cliente eliminado con éxito');
+          cargarTodosLosClientes(); // Recargar la lista de clientes después de eliminar uno
+        },
+        error: function(xhr, status, error) {
+          alert('Error al eliminar cliente: ' + xhr.responseText);
+        }
+      });
+    }
+  }
+
+  $(document).ready(function() {
+    $('#buscarClientesBtn').on('click', function(e) {
+      e.preventDefault();
+      buscarClientes();
+    });
+
+    cargarTodosLosClientes(); // Cargar los clientes al iniciar la página
+  });
+</script>
+</body>
+</html>

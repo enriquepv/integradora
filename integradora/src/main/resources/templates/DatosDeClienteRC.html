@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos Personales</title>
+    <link rel="stylesheet" th:href="@{/css/DatosDeClienteRC.css}">
+</head>
+<body>
+
+<div th:replace="~{/fragments/header.html}"></div>
+
+
+<main>
+    <div class="content">
+
+        <h2>Datos de cliente</h2>
+        <form action="/login/datos_de_cliente" method="post" id="registroForm" th:object="${cliente}">
+            <div class="form-group">
+                <label for="numero">Numero</label>
+                <input type="text" th:field="*{tarjetaCredito.numero}" id="numero" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" th:field="*{tarjetaCredito.cvv}" id="cvv" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="fechaCaducidad">Fecha de caducidad</label>
+                <input type="text" th:field="*{tarjetaCredito.fechaCaducidad}" id="fechaCaducidad" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="tipoVia">Tipo de via</label>
+                <input type="text" th:field="*{direccionEnvio.tipoVia}" id="tipoVia" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="numero">Numero</label>
+                <input type="text" th:field="*{direccionEnvio.numero}" id="numero" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label for="portal">Portal</label>
+                <input type="text" th:field="*{direccionEnvio.portal}" id="portal" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label for="planta">Planta</label>
+                <input type="text" th:field="*{direccionEnvio.planta}" id="planta" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="puerta">Puerta</label>
+                <input type="text" th:field="*{direccionEnvio.puerta}" id="puerta" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="localidad">Localidad</label>
+                <input type="text" th:field="*{direccionEnvio.localidad}" id="localidad" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="region">Region</label>
+                <input type="text" th:field="*{direccionEnvio.region}" id="region" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="codigoPostal">Código Postal</label>
+                <input type="text" th:field="*{direccionEnvio.codigoPostal}" id="codigoPostal" class="form-control">
+            </div>
+
+
+
+            <input type="submit" value="Siguiente">
+        </form>
+        <a href="http://localhost:5173/loggedhome" id="saltar">Saltar paso y continuar</a>
+    </div>
+</main>
+
+<div th:replace="~{/fragments/footer.html}"></div>
+
+
+</body>
+</html>

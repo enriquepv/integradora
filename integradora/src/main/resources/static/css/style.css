@@ -1,0 +1,8 @@
+.table {
+    display: flex;
+}
+
+.table-cell {
+    flex: 1;
+    border: 1px solid black; /* Agrega un borde para visualización */
+}

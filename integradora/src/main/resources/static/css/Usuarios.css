@@ -1,0 +1,32 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.blocked {
+    background-color: red;
+    color: white;
+}
+.unblocked {
+    background-color: green;
+    color: white;
+}
+.baja {
+    background-color: red;
+    color: white;
+}
+.no-baja {
+    background-color: green;
+    color: white;
+}

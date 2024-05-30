@@ -1,0 +1,18 @@
+.table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.row {
+    display: table-row;
+}
+.cell {
+    display: table-cell;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+.header {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}

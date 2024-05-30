@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro</title>
+    <link rel="stylesheet" th:href="@{/css/RegistroUsuario1.css}">
+</head>
+<body>
+
+<div th:replace="~{/fragments/header.html}"></div>
+
+<main>
+    <div class="content">
+        <h2>Registro de Usuario</h2>
+        <form action="registro_paso1" method="post" id="registroForm" th:object="${usuario}">
+            <div class="form-group">
+                <label for="email">Correo electrónico <span class="required">*</span></label>
+                <input type="text" th:field="*{email}" >
+                <span class="required" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="clave">Contraseña <span class="required">*</span></label>
+                <input type="password" th:field="*{clave}">
+                <span class="required" th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmarClave">Confirmar Clave <span class="required">*</span></label>
+                <input type="password" th:field="*{confirmarClave}">
+
+            <div>
+                <label for="preguntaRecuperacion">Pregunta de recuperación:</label>
+                <input type="text" id="preguntaRecuperacion" th:field="*{preguntaRecuperacion}" required />
+            </div>
+                <div>
+                    <label for="respuestaRecuperacion">Respuesta de recuperación:</label>
+                    <input type="text" id="respuestaRecuperacion" th:field="*{respuestaRecuperacion}" required />
+                </div>
+                <div th:if="${#fields.hasErrors('global')}">
+                    <span class="required" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+                </div>
+            </div>
+
+            <input type="submit" value="Siguiente">
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{/fragments/footer.html}"></div>
+
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div th:replace="~{/fragments/header.html}"></div>
+
+<main>
+    <div class="content">
+        <h2>Recuperar Contraseña</h2>
+        <form id="recuperarForm">
+            <div class="form-group">
+                <label>Pregunta de Recuperación:</label>
+                <p th:text="${preguntaRecuperacion}"></p>
+            </div>
+            <div class="form-group">
+                <label for="respuesta">Respuesta:</label>
+                <input type="text" id="respuesta" name="respuesta" required>
+            </div>
+            <div id="mensaje"></div>
+            <button type="submit">Recuperar Contraseña</button>
+        </form>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Obtener la pregunta de recuperación al cargar la página
+        $.ajax({
+            type: "GET",
+            url: "/login/recuperar",
+            success: function (data) {
+                var preguntaRecuperacion = $(data).find("#preguntaRecuperacion").text();
+                $("p#preguntaRecuperacion").text(preguntaRecuperacion);
+            },
+            error: function (error) {
+                console.error("Error al obtener la pregunta de recuperación: " + error.responseText);
+            }
+        });
+
+        // Manejar el envío del formulario de recuperación
+        $('#recuperarForm').submit(function (event) {
+            event.preventDefault();
+            var respuesta = $('#respuesta').val();
+            var email = $('#email').val();
+            $.ajax({
+                type: "POST",
+                url: "/login/recuperar",
+                data: { email: email, respuesta: respuesta },
+                success: function (response) {
+                    $('#mensaje').text(response);
+                },
+                error: function (error) {
+                    $('#mensaje').text(error.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+<div th:replace="~{/fragments/footer.html}"></div>
+
+</body>
+</html>

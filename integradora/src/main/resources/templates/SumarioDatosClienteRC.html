@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<a href="/register/datos_de_usuario">Paso1</a>/
+<a href="/register/datos_personales">Paso2</a>/
+<a href="/register/datos_profesionales">Paso3</a>/
+<a href="/register/paso_final">Paso Final</a>
+
+<h1>Paso final</h1>
+<form action="/login/sumario_datos_cliente" method="post" th:object="${cliente}">
+<fieldset>
+    <legend>Datos personales</legend>
+    <p><b>Nombre:</b> <span th:text="*{nombre}"></span> </p>
+    <p><b>Apellidos:</b> <span th:text="*{apellidos}"></span> </p>
+    <p><b>Genero:</b> <span th:text="*{genero}"></span> </p>
+    <p><b>Fecha de Nacimiento:</b> <span th:text="*{fechaNacimiento}"></span> </p>
+    <p><b>pais de nacimiento:</b> <span th:text="*{paisNacimiento}"></span> </p>
+    <p><b>Tipo de documento:</b> <span th:text="*{tipoDocumentoCliente}"></span> </p>
+    <p><b>Documento:</b> <span th:text="*{documento}"></span> </p>
+</fieldset>
+
+<fieldset>
+    <legend>Datos de contacto</legend>
+    <p><b>Telefono movil:</b> <span th:text="*{telefonoMovil}"></span> </p>
+    <span>Dirección personal</span>
+    <p><b>Tipo de via:</b> <span th:text="*{direccion.tipoVia}"></span> </p>
+    <p><b>Numero:</b> <span th:text="*{direccion.numero}"></span> </p>
+    <p><b>Portal:</b> <span th:text="*{direccion.portal}"></span> </p>
+    <p><b>Planta:</b> <span th:text="*{direccion.planta}"></span> </p>
+    <p><b>Puerta:</b> <span th:text="*{direccion.puerta}"></span> </p>
+    <p><b>Localidad:</b> <span th:text="*{direccion.localidad}"></span> </p>
+    <p><b>Region:</b> <span th:text="*{direccion.region}"></span> </p>
+    <p><b>Codigo postal:</b> <span th:text="*{direccion.codigoPostal}"></span> </p>
+</fieldset>
+
+<fieldset>
+    <legend>Datos de cliente</legend>
+    <span>Dirección de envio</span>
+    <p><b>Tipo de via:</b> <span th:text="*{direccionEnvio.tipoVia}"></span> </p>
+    <p><b>Numero:</b> <span th:text="*{direccionEnvio.numero}"></span> </p>
+    <p><b>Portal:</b> <span th:text="*{direccionEnvio.portal}"></span> </p>
+    <p><b>Planta:</b> <span th:text="*{direccionEnvio.planta}"></span> </p>
+    <p><b>Puerta:</b> <span th:text="*{direccionEnvio.puerta}"></span> </p>
+    <p><b>Localidad:</b> <span th:text="*{direccionEnvio.localidad}"></span> </p>
+    <p><b>Region:</b> <span th:text="*{direccionEnvio.region}"></span> </p>
+    <p><b>Codigo postal:</b> <span th:text="*{direccionEnvio.codigoPostal}"></span> </p>
+</fieldset>
+
+<input type="submit" value="Enviar"><br>
+</form>
+<!--    <button onclick="location.href='/register/borrarDatos'">Borrar Datos</button>-->
+<form action="borrarDatos" method="post">
+    <button type="submit">Borrar Datos</button>
+</form>
+</body>
+</html>

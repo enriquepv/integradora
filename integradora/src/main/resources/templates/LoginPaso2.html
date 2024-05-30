@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Inicio</title>
+    <link rel="stylesheet" th:href="@{/css/LoginPaso2.css}">
+</head>
+<body>
+
+<div th:replace="~{/fragments/header.html}"></div>
+
+<main>
+    <div class="content">
+        <h2>Inicio de Usuario</h2>
+        <form action="/login/login_paso2" method="post" id="registroForm" th:object="${usuario}">
+            <input type="hidden" name="email" th:value="${session.usuario.email}" />
+            <div class="form-group">
+                <label for="clave">Clave: <span class="required">*</span></label>
+                <input type="password" th:field="*{clave}">
+                <div th:if="${#fields.hasErrors('global')}">
+                    <span class="required" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>
+                </div>
+
+                <input type="checkbox" id="mostrarClave">Mostrar contraseña
+            </div>
+
+            <input type="submit" value="Siguiente">
+        </form>
+
+        <a href="/login/recuperar" id="recuperarContrasena">¿Olvidaste tu contraseña?</a> <!-- Enlace para recuperar contraseña -->
+
+        <a href="/register/registro_paso1" id="registrarse">¿No tienes cuenta? Regístrate</a>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mostrarContraseniaCheckbox = document.getElementById('mostrarClave');
+        const contraseniaInput = document.getElementById('clave');
+
+        mostrarContraseniaCheckbox.addEventListener('change', function() {
+            if (mostrarContraseniaCheckbox.checked) {
+                contraseniaInput.type = 'text';
+            } else {
+                contraseniaInput.type = 'password';
+            }
+        });
+    });
+</script>
+
+<div th:replace="~{/fragments/footer.html}"></div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+
+<style>
+    .header {
+        background-color: #6495ed; /* Cambiar color de encabezado a azul claro */
+        color: #fff;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between; /* Alinear elementos al espacio entre ellos */
+        align-items: center; /* Centrar verticalmente los elementos */
+    }
+
+    .header nav {
+        display: flex;
+        align-items: center; /* Alinear los elementos del nav verticalmente */
+    }
+
+    .header nav a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 10px; /* Espacio entre los enlaces y el badge */
+    }
+
+    .badge {
+        background-color: red; /* Color de fondo rojo para el número de páginas visitadas */
+        color: #fff;
+        border-radius: 50%; /* Hacer el contenedor redondo */
+        padding: 5px 10px; /* Espaciado dentro del contenedor */
+        font-size: 14px; /* Tamaño de la fuente */
+        margin-left: 10px; /* Espacio a la izquierda del enlace */
+    }
+
+
+</style>
+<header class="header">
+    <h1>Formulario de Registro</h1>
+    <nav>
+        <a href="http://localhost:8080/inicio/conexion">Inicio</a>
+        <span class="badge" th:text="${session.paginasVisitadas}">0</span> <!-- Número de páginas visitadas -->
+    </nav>
+</header>
