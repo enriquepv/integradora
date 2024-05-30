@@ -23,7 +23,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     Cliente findByNombre(String nombre);
 
     Optional<Cliente> findById(UUID idCliente);
-
+    @Query("SELECT c FROM Cliente c WHERE c.usuario.idUsuario = :idUsuario")
+    Cliente findByUsuarioId(@Param("idUsuario") UUID idUsuario);
 
 
     @Query("SELECT c FROM Cliente c JOIN FETCH c.usuario u WHERE "

@@ -47,4 +47,7 @@ public class ClienteService {
         return clienteRepository.buscarClientes( fechaNacimientoDesde, fechaNacimientoHasta,
                 apellido, bajaLogica, bloqueado);
     }
+    public Cliente obtenerClientePorUsuario(UUID idUsuario) {
+        return clienteRepository.findByUsuarioId(idUsuario);
+    }
 }
