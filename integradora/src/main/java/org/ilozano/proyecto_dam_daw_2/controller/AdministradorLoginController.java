@@ -66,9 +66,8 @@ public class AdministradorLoginController {
     }
 
     @GetMapping("/Cliente")
-    public String bajaLogica(Model model) {
-        List<Cliente> listaClientes = clienteService.devuelveClientes();
-        model.addAttribute("listaClientes", listaClientes);
+    public String bajaLogica() {
+
         return "Cliente";
     }
 

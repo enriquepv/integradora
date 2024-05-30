@@ -2,6 +2,7 @@ package org.ilozano.proyecto_dam_daw_2.configuration;
 
 import org.ilozano.proyecto_dam_daw_2.model.Producto;
 import org.ilozano.proyecto_dam_daw_2.repository.ProductoRepository;
+import org.ilozano.proyecto_dam_daw_2.servicioLigero.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class InitDatabase {
 
     @Autowired
-    private ProductoRepository productoRepository;
+    private ProductoService productoService;
 
     @Bean
     CommandLineRunner initProductos() {
@@ -25,7 +26,7 @@ public class InitDatabase {
             toalla.setMateriales(Arrays.asList("Algodón"));
             toalla.setCategoria("playa");
             toalla.setDimensiones(Map.of("largo", "200cm", "ancho", "100cm"));
-            productoRepository.save(toalla);
+            productoService.guardarProducto(toalla);
 
             Producto flotador = new Producto();
             flotador.setDescripcion("Flotador de piscina");
@@ -33,7 +34,7 @@ public class InitDatabase {
             flotador.setMateriales(Arrays.asList("Plástico"));
             flotador.setCategoria("piscina");
             flotador.setDimensiones(Map.of("diámetro", "100cm"));
-            productoRepository.save(flotador);
+            productoService.guardarProducto(flotador);
 
             Producto sombrilla = new Producto();
             sombrilla.setDescripcion("Sombrilla de playa");
@@ -41,7 +42,7 @@ public class InitDatabase {
             sombrilla.setMateriales(Arrays.asList("Metal", "Poliéster"));
             sombrilla.setCategoria("playa");
             sombrilla.setDimensiones(Map.of("altura", "220cm", "diámetro", "180cm"));
-            productoRepository.save(sombrilla);
+            productoService.guardarProducto(sombrilla);
 
             Producto gafasDeSol = new Producto();
             gafasDeSol.setDescripcion("Gafas de sol polarizadas");
@@ -49,7 +50,7 @@ public class InitDatabase {
             gafasDeSol.setMateriales(Arrays.asList("Plástico", "Cristal"));
             gafasDeSol.setCategoria("accesorios");
             gafasDeSol.setDimensiones(Map.of("anchoLente", "5.5cm", "altoLente", "4.5cm"));
-            productoRepository.save(gafasDeSol);
+            productoService.guardarProducto(gafasDeSol);
 
             Producto chanclas = new Producto();
             chanclas.setDescripcion("Chanclas de playa");
@@ -57,8 +58,7 @@ public class InitDatabase {
             chanclas.setMateriales(Arrays.asList("Goma"));
             chanclas.setCategoria("playa");
             chanclas.setDimensiones(Map.of("talla", "42"));
-            productoRepository.save(chanclas);
-
+            productoService.guardarProducto(chanclas);
         };
     }
 }

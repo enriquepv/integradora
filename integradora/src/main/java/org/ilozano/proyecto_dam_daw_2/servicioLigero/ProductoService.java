@@ -1,4 +1,4 @@
-package org.ilozano.proyecto_dam_daw_2.service;
+package org.ilozano.proyecto_dam_daw_2.servicioLigero;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
