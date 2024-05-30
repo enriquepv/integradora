@@ -296,97 +296,81 @@ public class UsuarioLoginController {
         return "redirect:/login/datos_de_contacto";
 
     }
-
     @GetMapping("/datos_de_contacto")
     public String datosDeContacto(HttpSession session,
                                   @ModelAttribute("cliente") Cliente cliente,
-                                  Model model) {
+                                  Model model){
         if (session.getAttribute("cliente") != null) { //Para recuperar los datos del usuario al cambiar de paso
             model.addAttribute("cliente", (Cliente) session.getAttribute("cliente"));
         }
 
         return "DatosDeContactoRC";
     }
-
     @PostMapping("/datos_de_contacto")
     public String procesarDatosDeContacto(HttpSession session,
-                                          @ModelAttribute("cliente") Cliente cliente) {
+                                          @ModelAttribute("cliente") Cliente cliente){
         if (session.getAttribute("cliente") == null) {
             return "redirect:/login/datos_personales";
         }
 
-        Cliente clienteTemporal = (Cliente) session.getAttribute("cliente");
+        Cliente clienteTemporal =(Cliente) session.getAttribute("cliente");
 
         clienteTemporal.setTelefonoMovil(cliente.getTelefonoMovil());
         clienteTemporal.setDireccion(cliente.getDireccion());
 
         return "redirect:/login/datos_de_cliente";
     }
-
     @GetMapping("/datos_de_cliente")
     public String datosDeCliente(HttpSession session,
-                                 @ModelAttribute("cliente") Cliente cliente,
-                                 Model model) {
+                                 @ModelAttribute("cliente")Cliente cliente,
+                                 Model model){
         if (session.getAttribute("cliente") != null) { //Para recuperar los datos del usuario al cambiar de paso
             model.addAttribute("cliente", (Cliente) session.getAttribute("cliente"));
         }
         return "DatosDeClienteRC";
     }
-
     @PostMapping("/datos_de_cliente")
     public String procesarDatosDeCliente(HttpSession session,
-                                         @ModelAttribute("cliente") Cliente cliente) {
+                                         @ModelAttribute("cliente") Cliente cliente){
 
         if (session.getAttribute("cliente") == null) {
             return "redirect:/login/datos_personales";
         }
 
-        Cliente clienteTemporal = (Cliente) session.getAttribute("cliente");
+        Cliente clienteTemporal =(Cliente) session.getAttribute("cliente");
 
         clienteTemporal.setTarjetaCredito(cliente.getTarjetaCredito());
         clienteTemporal.setDireccionEnvio(cliente.getDireccionEnvio());
 
         return "redirect:/login/sumario_datos_cliente";
     }
-
     @GetMapping("/sumario_datos_cliente")
     public String sumarioDatosCliente(HttpSession session,
                                       @ModelAttribute("cliente") Cliente cliente,
-                                      Model model) {
+                                      Model model){
 
         if (session.getAttribute("cliente") != null) { //Para recuperar los datos del usuario al cambiar de paso
             model.addAttribute("cliente", (Cliente) session.getAttribute("cliente"));
         }
         return "SumarioDatosClienteRC";
     }
-
     @PostMapping("/sumario_datos_cliente")
     public String procesarSumarioDatosCliente(HttpSession session,
                                               @ModelAttribute("cliente") Cliente cliente
-    ) {
-        if (session.getAttribute("cliente") == null) {
-            return "redirect:/login/datos_personales";
-        }
+    ){
 
-        // Obtén el Usuario que inició sesión
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) {
-            // Maneja el caso en que el usuario es null
-            return "redirect:/login/login_paso1";
-        }
 
-        // Busca el Usuario por idUsuario
-        Usuario usuarioRegistrado = usuarioService.devuelveUsuario(usuario.getIdUsuario());
-        if (usuarioRegistrado == null) {
-            // Maneja el caso en que el usuario no se encuentra
-            return "redirect:/login/login_paso1";
-        }
 
-        Cliente clienteTemporal = (Cliente) session.getAttribute("cliente");
-        clienteTemporal.setUsuario(usuarioRegistrado);
-        clienteService.guardarCliente(clienteTemporal);
 
-        return "redirect:http://localhost:8080/inicio/paginaPrincipal";
+        Usuario usuario = usuarioService.buscarUsuarioPorEmail(EMAIL);
+        cliente.setUsuario(usuario);
+        clienteService.guardarCliente((Cliente)session.getAttribute("cliente"));
+        usuario.setCliente((Cliente)session.getAttribute("cliente"));
+        usuarioService.guardarUsuario(usuario);
+
+
+        return "redirect:/inicio/paginaPrincipal";
     }
+
 }
 
