@@ -1,31 +1,125 @@
-table {
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 10px;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* Estilos de enlaces */
+.admin-link,
+.logout-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.admin-link {
+    background-color: #007BFF;
+}
+
+.admin-link:hover {
+    background-color: #0056b3;
+}
+
+.logout-link {
+    background-color: red;
+}
+
+.logout-link:hover {
+    background-color: darkred;
+}
+
+/* Estilos de formulario */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+select {
+    width: calc(100% - 10px); /* 10px padding */
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+button[type="button"],
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+button[type="button"]:hover,
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos de tabla */
+#userTable {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
-th, td {
+
+#userTable th,
+#userTable td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
     text-align: left;
 }
-tr:nth-child(even) {
+
+#userTable th {
     background-color: #f2f2f2;
+    font-weight: bold;
 }
-button {
-    padding: 5px 10px;
-    cursor: pointer;
+
+#userTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
+
+/* Estados específicos de los usuarios */
 .blocked {
     background-color: red;
     color: white;
 }
+
 .unblocked {
     background-color: green;
     color: white;
 }
+
 .baja {
     background-color: red;
     color: white;
 }
+
 .no-baja {
     background-color: green;
     color: white;

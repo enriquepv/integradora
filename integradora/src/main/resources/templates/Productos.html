@@ -6,6 +6,12 @@
     <link rel="stylesheet" th:href="@{/css/Productos.css}">
 </head>
 <body>
+<h3>Número actual de páginas visitadas: <span th:text="${paginasVisitadasAdmin}"></span></h3>
+<a href="http://localhost:8080/login/paginaAdministracion" class="admin-link">Ir a la página de administración</a>
+<a href="/login/logout" class="logout-link"style="background-color: red">Cerrar sesión</a>
+
+
+
 <h2>Añadir Producto</h2>
 <form id="formProducto">
     <label for="descripcion">Descripción:</label><br>

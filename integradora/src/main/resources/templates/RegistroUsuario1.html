@@ -32,11 +32,11 @@
 
             <div>
                 <label for="preguntaRecuperacion">Pregunta de recuperación:</label>
-                <input type="text" id="preguntaRecuperacion" th:field="*{preguntaRecuperacion}" required />
+                <input type="text" id="preguntaRecuperacion" th:field="*{preguntaRecuperacion}"  />
             </div>
                 <div>
                     <label for="respuestaRecuperacion">Respuesta de recuperación:</label>
-                    <input type="text" id="respuestaRecuperacion" th:field="*{respuestaRecuperacion}" required />
+                    <input type="text" id="respuestaRecuperacion" th:field="*{respuestaRecuperacion}"  />
                 </div>
                 <div th:if="${#fields.hasErrors('global')}">
                     <span class="required" th:each="err : ${#fields.errors('global')}" th:text="${err}"/>

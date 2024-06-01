@@ -23,8 +23,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(paginasVisitadasInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login/**", "/resources/**", "/static/**", "/error/**", "/404", "/acceso_denegado");
+                .addPathPatterns("/login/paginaAdministracion", "/login/Usuario", "/login/Cliente", "/login/productos");
+
 
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/login/login_paso2", "/login/datos_personales", "/login/datos_de_contacto", "/login/datos_de_cliente", "/login/sumario_datos_cliente");

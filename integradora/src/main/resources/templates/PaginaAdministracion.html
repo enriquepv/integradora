@@ -7,24 +7,32 @@
     <link rel="stylesheet" th:href="@{/css/PaginaAdministracion.css}">
 </head>
 <body>
+
 <div class="container">
-<h1>Panel de Administración</h1>
 
-<h2>Funcionalidades:</h2>
+    <!-- Mostrar mensaje si paginasVisitadasAdmin es igual a 1 -->
+    <div th:if="${paginasVisitadasAdmin == 1}">
+        <h4>Hola de nuevo <span th:text="${#strings.capitalize(admin)}"></span>, en el anterior inicio tuviste <span th:text="${paginasVisitadasAdminAnterior}"></span> visita(s).</h4>
+    </div>
 
-<!-- Enlaces a diferentes funcionalidades -->
+    <h3>Número actual de páginas visitadas: <span th:text="${paginasVisitadasAdmin}"></span></h3>
+    <a href="/login/logout" class="logout-link" style="background-color: red">Cerrar sesión</a>
 
-<!-- Bloqueo/desbloqueo de usuario de la tienda/empleado -->
-<a href="http://localhost:8080/login/Usuario">Usuario</a><br>
+    <h1>Panel de Administración</h1>
 
-<!-- Baja lógica de usuario/cliente/empleado -->
-<a href="http://localhost:8080/login/Cliente">Cliente</a><br>
+    <h2>Funcionalidades:</h2>
 
+    <!-- Enlaces a diferentes funcionalidades -->
 
-<a href="http://localhost:8080/login/productos">productos</a><br>
+    <!-- Bloqueo/desbloqueo de usuario de la tienda/empleado -->
+    <a href="http://localhost:8080/login/Usuario">Usuario</a><br>
 
+    <!-- Baja lógica de usuario/cliente/empleado -->
+    <a href="http://localhost:8080/login/Cliente">Cliente</a><br>
+
+    <a href="http://localhost:8080/login/productos">productos</a><br>
 
 </div>
 </body>
-
 </html>
+

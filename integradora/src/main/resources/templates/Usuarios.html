@@ -7,7 +7,11 @@
     <link rel="stylesheet" th:href="@{/css/Usuarios.css}">
 </head>
 <body>
-<h1>Administración</h1>
+<h3>Número actual de páginas visitadas: <span th:text="${paginasVisitadasAdmin}"></span></h3>
+<a href="http://localhost:8080/login/paginaAdministracion" class="admin-link">Ir a la página de administración</a>
+<a href="/login/logout" class="logout-link" style="background-color: red">Cerrar sesión</a>
+
+<h1>Administración usuarios</h1>
 
 <!-- Formulario para bloquear/desbloquear usuarios -->
 <h2>Bloquear/Desbloquear Usuario</h2>
@@ -16,8 +20,8 @@
     <input type="text" id="blockUsername" name="blockUsername">
     <label for="blockReason">Motivo:</label>
     <input type="text" id="blockReason" name="blockReason">
-    <button type="submit" id="blockBtn">Bloquear</button>
-    <button type="button" id="unblockBtn">Desbloquear</button>
+    <button type="submit" id="blockBtn" style="background-color: skyblue">Bloquear</button>
+    <button type="button" id="unblockBtn" style="background-color: skyblue">Desbloquear</button>
 </form>
 
 <!-- Formulario para dar de baja/quitar baja a un usuario -->
@@ -25,8 +29,8 @@
 <form id="deactivateForm">
     <label for="deactivateUsername">Nombre de Usuario:</label>
     <input type="text" id="deactivateUsername" name="deactivateUsername">
-    <button type="submit" id="deactivateBtn">Dar de Baja</button>
-    <button type="button" id="reactivateBtn">Quitar Baja</button>
+    <button type="submit" id="deactivateBtn" style="background-color: skyblue">Dar de Baja</button>
+    <button type="button" id="reactivateBtn" style="background-color: skyblue">Quitar Baja</button>
 </form>
 
 <!-- Tabla de usuarios -->

@@ -86,16 +86,6 @@ public class UsuarioLoginController {
         return "redirect:/login/login_paso2";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session, HttpServletResponse response) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario != null) {
-            int paginasVisitadas = (int) session.getAttribute("paginasVisitadas");
-            guardarPaginasVisitadasEnCookie(response, paginasVisitadas);
-        }
-        session.invalidate();
-        return "redirect:/login/login_paso1";
-    }
 
     private String obtenerPaginasVisitadasDeCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();

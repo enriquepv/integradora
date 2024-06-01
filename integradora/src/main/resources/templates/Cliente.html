@@ -6,6 +6,11 @@
   <link rel="stylesheet" th:href="@{/css/Cliente.css}">
 </head>
 <body>
+<h3>Número actual de páginas visitadas: <span th:text="${paginasVisitadasAdmin}"></span></h3>
+<a href="http://localhost:8080/login/paginaAdministracion" class="admin-link">Ir a la página de administración</a>
+<a href="/login/logout" class="logout-link" style="background-color: red">Cerrar sesión</a>
+<br><br>
+<h1>Busqueda de Clientes</h1>
 <form id="formBusquedaClientes">
   <label for="fechaNacimientoDesde">Fecha de Nacimiento Desde:</label>
   <input type="text" id="fechaNacimientoDesde" name="fechaNacimientoDesde" placeholder="YYYY-MM-DD">

@@ -46,19 +46,19 @@ services:
     volumes:
       - ./pruebaTomcat/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
-  nodejs:
-    container_name: contiene_nodejs
-    networks:
-      red_integradora:
-        ipv4_address: 172.19.0.5
-    build: ./PracticaIntegradoraVue
-    ports:
-      - "5173:5173"
-    depends_on:
-      mysql:
-        condition: service_healthy
-      mongo:
-        condition: service_started
+#  nodejs:
+#    container_name: contiene_nodejs
+#    networks:
+#      red_integradora:
+#        ipv4_address: 172.19.0.5
+#    build: ./PracticaIntegradoraVue
+#    ports:
+#      - "5173:5173"
+#    depends_on:
+#      mysql:
+#        condition: service_healthy
+#      mongo:
+#        condition: service_started
 
 
 networks:

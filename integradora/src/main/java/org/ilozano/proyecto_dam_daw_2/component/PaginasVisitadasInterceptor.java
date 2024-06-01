@@ -12,15 +12,22 @@ public class PaginasVisitadasInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("usuario") != null) {
-            Integer paginasVisitadas = (Integer) session.getAttribute("paginasVisitadas");
+        if (session != null && session.getAttribute("admin") != null) {
+            Integer paginasVisitadas = (Integer) session.getAttribute("paginasVisitadasAdmin");
             if (paginasVisitadas == null) {
                 paginasVisitadas = 0;
             }
-            paginasVisitadas++;
-            session.setAttribute("paginasVisitadas", paginasVisitadas);
+            String uri = request.getRequestURI();
+            if (uri.startsWith("/login/paginaAdministracion") ||
+                    uri.startsWith("/login/Usuario") ||
+                    uri.startsWith("/login/Cliente") ||
+                    uri.startsWith("/login/productos")) {
+                paginasVisitadas++;
+                session.setAttribute("paginasVisitadasAdmin", paginasVisitadas);
+            }
         }
         return true;
     }
 }
+
 
