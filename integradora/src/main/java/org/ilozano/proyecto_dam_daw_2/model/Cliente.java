@@ -14,7 +14,6 @@ import org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.Genero;
 import org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.TipoDocumento;
 
 import java.time.LocalDate;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -29,8 +28,8 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idCliente;
 
-    @NotNull(message = "El género es obligatorio")
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "genero_id")
     private Genero genero;
 
     @NotNull(message = "La fecha de nacimiento es obligatoria")
@@ -38,8 +37,8 @@ public class Cliente {
 
     private String paisNacimiento; //Esto es una clase pais
 
-    @NotNull(message = "El tipo de documento es obligatorio")
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "tipo_documento_id")
     private TipoDocumento tipoDocumentoCliente;
 
     @NotNull(message = "El documento es obligatorio")

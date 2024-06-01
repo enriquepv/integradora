@@ -7,8 +7,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.ilozano.proyecto_dam_daw_2.model.Cliente;
+import org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.Genero;
+import org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.TipoDocumento;
 import org.ilozano.proyecto_dam_daw_2.model.Usuario;
 import org.ilozano.proyecto_dam_daw_2.servicioLigero.ClienteService;
+import org.ilozano.proyecto_dam_daw_2.servicioLigero.GeneroService;
+import org.ilozano.proyecto_dam_daw_2.servicioLigero.TipoDocumentoService;
 import org.ilozano.proyecto_dam_daw_2.servicioLigero.UsuarioService;
 import org.ilozano.proyecto_dam_daw_2.validaciones.login.ValidacionLogin1;
 import org.ilozano.proyecto_dam_daw_2.validaciones.login.ValidacionLogin2;
@@ -25,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -39,6 +44,11 @@ public class UsuarioLoginController {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private GeneroService generoService;
+
+    @Autowired
+    private TipoDocumentoService tipoDocumentoService;
 
     @GetMapping("/login_paso1")
     public String login_paso1(HttpSession session, HttpServletRequest request, Model model) {
@@ -258,13 +268,18 @@ public class UsuarioLoginController {
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
 
+        // Obtener todos los géneros del servicio
+        List<Genero> generos = generoService.obtenerTodosLosGeneros();
+        model.addAttribute("generos", generos);
+
+        // Obtener todos los tipos de documento del servicio
+        List<TipoDocumento> tiposDocumento = tipoDocumentoService.obtenerTodosLosTiposDocumento();
+        model.addAttribute("tiposDocumento", tiposDocumento);
 
         if (session.getAttribute("cliente") != null) {
             model.addAttribute("cliente", (Cliente) session.getAttribute("cliente"));
-            //En caso de que haya un usuario en la sesión, esta se lo añade al modelo.
-            //Esto se usa para que los datos introducidos se puedan recuperar cuando cambias de paso.
+            // En caso de que haya un usuario en la sesión, se añade al modelo para recuperar los datos introducidos.
         }
-
 
         return "datosPersonalesRC";
     }
@@ -272,7 +287,9 @@ public class UsuarioLoginController {
     @PostMapping("/datos_personales")
     public String procesarDatosPersonales(HttpSession session,
                                           @ModelAttribute("cliente") @Valid Cliente cliente,
-                                          BindingResult bindingResult) {
+                                          BindingResult bindingResult,
+                                          @RequestParam Long genero,
+                                          @RequestParam Long tipoDocumentoCliente) {
 
         // Verifica si hay errores de validación
         if (bindingResult.hasErrors()) {
@@ -280,11 +297,18 @@ public class UsuarioLoginController {
             return "datosPersonalesRC";
         }
 
+        // Aquí debes obtener los objetos Genero y TipoDocumento utilizando sus IDs
+        Genero generoSeleccionado = generoService.obtenerGeneroPorId(genero);
+        cliente.setGenero(generoSeleccionado);
+
+        TipoDocumento tipoDocumentoSeleccionado = tipoDocumentoService.obtenerTipoDocumentoPorId(tipoDocumentoCliente);
+        cliente.setTipoDocumentoCliente(tipoDocumentoSeleccionado);
+
         cliente.setFechaAlta(LocalDate.now());
         session.setAttribute("cliente", cliente);
         return "redirect:/login/datos_de_contacto";
-
     }
+
 
     @GetMapping("/datos_de_contacto")
     public String datosDeContacto(HttpSession session,

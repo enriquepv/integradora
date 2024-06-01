@@ -28,9 +28,11 @@
             <div class="form-group">
                 <label>Género</label>
                 <div id="genero" style="display: inline-block;">
-                    <div th:each="genero : ${T(org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.Genero).values()}">
-                        <input type="radio" th:value="${genero}" th:id="${'genero_' + genero}" name="genero" />
-                        <label th:for="${'genero_' + genero}" th:text="${#strings.capitalize(genero.toString().toLowerCase())}" style="display: inline-block; margin-right: 10px;"></label>
+                    <div th:each="genero : ${generos}">
+                        <input type="radio" th:value="${genero.id}" th:id="${'genero_' + genero.id}"
+                               th:checked="${cliente.genero != null and genero.id == cliente.genero.id}" name="genero"/>
+                        <label th:for="${'genero_' + genero.id}" th:text="${genero.nombre}"
+                               style="display: inline-block; margin-right: 10px;"></label>
                     </div>
                 </div>
                 <span class="error" th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}"></span>
@@ -52,9 +54,11 @@
             <div class="form-group">
                 <label for="tipoDocumentoCliente">Tipo de documento</label>
                 <div id="tipoDocumentoCliente" style="display: inline-block;">
-                    <div th:each="tipoDocumento : ${T(org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.TipoDocumento).values()}">
-                        <input type="radio" th:value="${tipoDocumento}" th:id="${'tipoDocumento_' + tipoDocumento}" name="tipoDocumentoCliente" />
-                        <label th:for="${'tipoDocumento_' + tipoDocumento}" th:text="${#strings.capitalize(tipoDocumento.toString().toLowerCase())}" style="display: inline-block; margin-right: 10px;"></label>
+                    <div th:each="tipoDocumento : ${tiposDocumento}">
+                        <input type="radio" th:value="${tipoDocumento.id}" th:id="${'tipoDocumento_' + tipoDocumento.id}"
+                               th:checked="${cliente.tipoDocumentoCliente != null and tipoDocumento.id == cliente.tipoDocumentoCliente.id}" name="tipoDocumentoCliente"/>
+                        <label th:for="${'tipoDocumento_' + tipoDocumento.id}" th:text="${tipoDocumento.nombre}"
+                               style="display: inline-block; margin-right: 10px;"></label>
                     </div>
                 </div>
                 <span class="error" th:if="${#fields.hasErrors('tipoDocumentoCliente')}" th:errors="*{tipoDocumentoCliente}"></span>
