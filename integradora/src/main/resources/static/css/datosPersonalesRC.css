@@ -97,6 +97,24 @@ footer {
     display: block;
     text-align: center;
 }
+#links {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#links a {
+    color: #6495ed;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+#links a:hover {
+    color: #4169e1;
+    text-decoration: underline;
+}
 
 .error {
     color: red;

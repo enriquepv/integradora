@@ -363,13 +363,11 @@ public class UsuarioLoginController {
     }
 
     @GetMapping("/sumario_datos_cliente")
-    public String sumarioDatosCliente(HttpSession session,
-                                      @ModelAttribute("cliente") Cliente cliente,
-                                      Model model) {
-
-        if (session.getAttribute("cliente") != null) { //Para recuperar los datos del usuario al cambiar de paso
-            model.addAttribute("cliente", (Cliente) session.getAttribute("cliente"));
+    public String sumarioDatosCliente(HttpSession session, Model model) {
+        if (session.getAttribute("cliente") == null) {
+            return "redirect:/login/datos_personales";
         }
+        model.addAttribute("cliente", session.getAttribute("cliente"));
         return "SumarioDatosClienteRC";
     }
 

@@ -6,10 +6,13 @@
 </head>
 <body>
 
-<a href="/register/datos_de_usuario">Paso1</a>/
-<a href="/register/datos_personales">Paso2</a>/
-<a href="/register/datos_profesionales">Paso3</a>/
-<a href="/register/paso_final">Paso Final</a>
+<div id="links">
+    <a href="/login/datos_personales">Paso1</a>/
+    <a href="/login/datos_de_contacto">Paso2</a>/
+    <a href="/login/datos_de_cliente">Paso3</a>/
+    <a href="/login/sumario_datos_cliente">Paso Final</a>
+</div>
+
 
 <h1>Paso final</h1>
 <form action="/login/sumario_datos_cliente" method="post" th:object="${cliente}">
