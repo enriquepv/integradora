@@ -18,6 +18,9 @@ public class Genero {
     private String nombre;
 
 
-
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
     // Getters y setters
 }

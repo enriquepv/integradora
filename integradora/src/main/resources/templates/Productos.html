@@ -209,15 +209,22 @@
                 const fila = document.createElement('tr');
                 fila.innerHTML = `
                     <td>${producto.id}</td>
-                    <td>${producto.descripcion}</td>
+                    <td>${producto.descripcion ? producto.descripcion : 'N/A'}</td>
                     <td>${producto.precio}</td>
                     <td>${producto.categoria}</td>
-                    <td><button onclick="eliminarProducto('${producto.id}')">Eliminar</button></td>
+                    <td>
+                        <button onclick="eliminarProducto('${producto.id}')">Eliminar</button>
+                        <button onclick="verDetalleProducto('${producto.id}')">Ver Detalle</button>
+                    </td>
                 `;
                 tablaProductos.appendChild(fila);
             });
         })
         .catch(error => console.error('Error:', error));
+
+    function verDetalleProducto(idProducto) {
+        window.location.href = `/login/producto/${idProducto}`;
+    }
 </script>
 </body>
 </html>

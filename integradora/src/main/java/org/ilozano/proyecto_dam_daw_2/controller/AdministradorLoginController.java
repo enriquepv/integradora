@@ -6,8 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.ilozano.proyecto_dam_daw_2.model.Cliente;
+import org.ilozano.proyecto_dam_daw_2.model.Producto;
 import org.ilozano.proyecto_dam_daw_2.servicioLigero.AdministradorService;
 import org.ilozano.proyecto_dam_daw_2.servicioLigero.ClienteService;
+import org.ilozano.proyecto_dam_daw_2.servicioLigero.ProductoService;
 import org.ilozano.proyecto_dam_daw_2.servicioLigero.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,8 @@ public class AdministradorLoginController {
     private UsuarioService usuarioService;
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private ProductoService productoService;
 
     @Autowired
     public AdministradorLoginController(AdministradorService administradorService) {
@@ -103,6 +107,17 @@ public class AdministradorLoginController {
         return "modificarCliente";
     }
 
+    @GetMapping("/producto/{idProducto}")
+    public String detalleProducto(@PathVariable String idProducto, HttpSession session, Model model) {
+        addPaginasVisitadasToModel(session, model);
+        Producto producto = productoService.obtenerProductoPorId(idProducto);
+        if (producto == null) {
+            model.addAttribute("error", "Producto no encontrado");
+            return "error"; // Página de error o redirigir a una página de error
+        }
+        model.addAttribute("producto", producto);
+        return "detalleProducto";
+    }
     @GetMapping("/logout")
     public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         // Obtener el nombre de usuario administrador y páginas visitadas

@@ -16,16 +16,16 @@
 
 <h1>Paso final</h1>
 <form action="/login/sumario_datos_cliente" method="post" th:object="${cliente}">
-<fieldset>
-    <legend>Datos personales</legend>
-    <p><b>Nombre:</b> <span th:text="*{nombre}"></span> </p>
-    <p><b>Apellidos:</b> <span th:text="*{apellidos}"></span> </p>
-    <p><b>Genero:</b> <span th:text="*{genero}"></span> </p>
-    <p><b>Fecha de Nacimiento:</b> <span th:text="*{fechaNacimiento}"></span> </p>
-    <p><b>pais de nacimiento:</b> <span th:text="*{paisNacimiento}"></span> </p>
-    <p><b>Tipo de documento:</b> <span th:text="*{tipoDocumentoCliente}"></span> </p>
-    <p><b>Documento:</b> <span th:text="*{documento}"></span> </p>
-</fieldset>
+    <fieldset>
+        <legend>Datos personales</legend>
+        <p><b>Nombre:</b> <span th:text="*{nombre}"></span></p>
+        <p><b>Apellidos:</b> <span th:text="*{apellidos}"></span></p>
+        <p><b>Género:</b> <span th:text="*{genero.nombre}"></span></p>
+        <p><b>Fecha de Nacimiento:</b> <span th:text="*{fechaNacimiento}"></span></p>
+        <p><b>País de nacimiento:</b> <span th:text="*{paisNacimiento}"></span></p>
+        <p><b>Tipo de documento:</b> <span th:text="*{tipoDocumentoCliente.nombre}"></span></p>
+        <p><b>Documento:</b> <span th:text="*{documento}"></span></p>
+    </fieldset>
 
 <fieldset>
     <legend>Datos de contacto</legend>

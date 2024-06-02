@@ -16,5 +16,9 @@ public class TipoDocumento {
     @Column(name = "nombre")
     private String nombre;
 
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
     // Getters y setters
 }
