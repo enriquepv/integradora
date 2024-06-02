@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -92,22 +93,22 @@ public class ApiRest {
     }
     @GetMapping("/clientes/filtrados")
     public ResponseEntity<List<Cliente>> obtenerClientesFiltrados(
-            @RequestParam(required = false)@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimientoDesde, // Nueva línea
-            @RequestParam(required = false)@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimientoHasta, // Nueva línea
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimientoDesde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimientoHasta,
             @RequestParam(required = false) String apellido,
             @RequestParam(required = false) Boolean bajaLogica,
-            @RequestParam(required = false) Boolean bloqueado) {
+            @RequestParam(required = false) Boolean bloqueado,
+            @RequestParam(required = false) BigDecimal salarioDesde,
+            @RequestParam(required = false) BigDecimal salarioHasta) {
         try {
-            // Convertir las cadenas de texto a LocalDate
-//            LocalDate fechaAltaDesde = fechaAltaDesdeStr != null ? LocalDate.parse(fechaAltaDesdeStr) : null; // Nueva línea
-//            LocalDate fechaAltaHasta = fechaAltaHastaStr != null ? LocalDate.parse(fechaAltaHastaStr) : null; // Nueva línea
-
-            List<Cliente> clientes = clienteService.buscarClientes( fechaNacimientoDesde, fechaNacimientoHasta, apellido, bajaLogica, bloqueado); // Modificado
+            List<Cliente> clientes = clienteService.buscarClientes(
+                    fechaNacimientoDesde, fechaNacimientoHasta, apellido, bajaLogica, bloqueado, salarioDesde, salarioHasta);
             return ResponseEntity.ok(clientes);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
     @DeleteMapping("/clientes/{idCliente}")
     public ResponseEntity<?> eliminarCliente(@PathVariable UUID idCliente) {
         try {

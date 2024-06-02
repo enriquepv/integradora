@@ -7,6 +7,7 @@ import org.ilozano.proyecto_dam_daw_2.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Service
 public class ClienteService {
+
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -24,6 +26,7 @@ public class ClienteService {
     public List<Cliente> devuelveClientes() {
         return clienteRepository.findAll();
     }
+
     public boolean eliminarCliente(UUID idCliente) {
         Optional<Cliente> clienteOpt = clienteRepository.findById(idCliente);
         if (clienteOpt.isPresent()) {
@@ -33,20 +36,24 @@ public class ClienteService {
             return false;
         }
     }
+
     public Cliente obtenerClientePorId(UUID idCliente) {
-        return clienteRepository.findById(idCliente).orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
+        return clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
     }
+
     public Cliente findClienteByNombre(String nombre) {
         return clienteRepository.findByNombre(nombre);
     }
 
-    // Nuevo método para buscar clientes
-    public List<Cliente> buscarClientes(
-                                        LocalDate fechaNacimientoDesde, LocalDate fechaNacimientoHasta,
-                                        String apellido, Boolean bajaLogica, Boolean bloqueado) {
-        return clienteRepository.buscarClientes( fechaNacimientoDesde, fechaNacimientoHasta,
-                apellido, bajaLogica, bloqueado);
+    // Método para buscar clientes con filtros incluyendo salario
+    public List<Cliente> buscarClientes(LocalDate fechaNacimientoDesde, LocalDate fechaNacimientoHasta,
+                                        String apellido, Boolean bajaLogica, Boolean bloqueado,
+                                        BigDecimal salarioDesde, BigDecimal salarioHasta) {
+        return clienteRepository.buscarClientes(fechaNacimientoDesde, fechaNacimientoHasta,
+                apellido, bajaLogica, bloqueado, salarioDesde, salarioHasta);
     }
+
     public Cliente obtenerClientePorUsuario(UUID idUsuario) {
         return clienteRepository.findByUsuarioId(idUsuario);
     }

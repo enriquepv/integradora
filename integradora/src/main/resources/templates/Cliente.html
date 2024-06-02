@@ -10,13 +10,19 @@
 <a href="http://localhost:8080/login/paginaAdministracion" class="admin-link">Ir a la página de administración</a>
 <a href="/login/logout" class="logout-link" style="background-color: red">Cerrar sesión</a>
 <br><br>
-<h1>Busqueda de Clientes</h1>
+<h1>Búsqueda de Clientes</h1>
 <form id="formBusquedaClientes">
   <label for="fechaNacimientoDesde">Fecha de Nacimiento Desde:</label>
   <input type="text" id="fechaNacimientoDesde" name="fechaNacimientoDesde" placeholder="YYYY-MM-DD">
 
   <label for="fechaNacimientoHasta">Fecha de Nacimiento Hasta:</label>
   <input type="text" id="fechaNacimientoHasta" name="fechaNacimientoHasta" placeholder="YYYY-MM-DD">
+
+  <label for="salarioDesde">Salario Desde:</label>
+  <input type="text" id="salarioDesde" name="salarioDesde">
+
+  <label for="salarioHasta">Salario Hasta:</label>
+  <input type="text" id="salarioHasta" name="salarioHasta">
 
   <label for="apellido">Apellido (patrón):</label>
   <input type="text" id="apellido" name="apellido">
@@ -44,6 +50,7 @@
     <th>Nombre</th>
     <th>Fecha de Nacimiento</th>
     <th>Apellidos</th>
+    <th>Salario</th>
     <th>Baja de Usuario</th>
     <th>Bloqueo de Usuario</th>
     <th>Acciones</th>
@@ -71,6 +78,7 @@
                   '<td><a href="cliente/' + cliente.idCliente + '">' + cliente.nombre + '</a></td>' +
                   '<td>' + cliente.fechaNacimiento + '</td>' +
                   '<td>' + cliente.apellidos + '</td>' +
+                  '<td>' + cliente.salario.toFixed(2) + '</td>' + // Mostrar salario con dos decimales
                   '<td class="' + claseBaja + '">' + estadoBaja + '</td>' +
                   '<td class="' + claseBloqueado + '">' + estadoBloqueado + '</td>' +
                   '<td><input type="hidden" class="idCliente" value="' + cliente.idCliente + '">' + // Campo oculto con ID del cliente
@@ -92,8 +100,11 @@
       fechaNacimientoHasta: $('#fechaNacimientoHasta').val(),
       apellido: $('#apellido').val(),
       bajaLogica: $('#bajaLogica').val(),
-      bloqueado: $('#bloqueado').val()
+      bloqueado: $('#bloqueado').val(),
+      salarioDesde: $('#salarioDesde').val(),
+      salarioHasta: $('#salarioHasta').val()
     };
+
 
     $.ajax({
       url: '/api/clientes/filtrados',
@@ -109,6 +120,7 @@
                   '<td>' + cliente.nombre + '</td>' +
                   '<td>' + cliente.fechaNacimiento + '</td>' +
                   '<td>' + cliente.apellidos + '</td>' +
+                  '<td>' + cliente.salario.toFixed(2) + '</td>' + // Mostrar salario con dos decimales
                   '<td class="' + claseBaja + '">' + (cliente.usuario.bajaLogica ? 'Sí' : 'No') + '</td>' +
                   '<td class="' + claseBloqueado + '">' + (cliente.usuario.bloqueado ? 'Sí' : 'No') + '</td>' +
                   '<td><input type="hidden" class="idCliente" value="' + cliente.idCliente + '">' + // Campo oculto con ID del cliente

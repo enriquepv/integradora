@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,15 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
             + "(:fechaNacimientoHasta IS NULL OR c.fechaNacimiento <= :fechaNacimientoHasta) AND "
             + "(:apellido IS NULL OR c.apellidos LIKE %:apellido%) AND "
             + "(:bajaLogica IS NULL OR u.bajaLogica = :bajaLogica) AND "
-            + "(:bloqueado IS NULL OR u.bloqueado = :bloqueado)")
-    List<Cliente> buscarClientes(@Param("fechaNacimientoDesde") LocalDate fechaNacimientoDesde, @Param("fechaNacimientoHasta") LocalDate fechaNacimientoHasta,
-                                 @Param("apellido") String apellido, @Param("bajaLogica") Boolean bajaLogica,
-                                 @Param("bloqueado") Boolean bloqueado);
+            + "(:bloqueado IS NULL OR u.bloqueado = :bloqueado) AND "
+            + "(:salarioDesde IS NULL OR c.salario >= :salarioDesde) AND "
+            + "(:salarioHasta IS NULL OR c.salario <= :salarioHasta)")
+    List<Cliente> buscarClientes(
+            @Param("fechaNacimientoDesde") LocalDate fechaNacimientoDesde,
+            @Param("fechaNacimientoHasta") LocalDate fechaNacimientoHasta,
+            @Param("apellido") String apellido,
+            @Param("bajaLogica") Boolean bajaLogica,
+            @Param("bloqueado") Boolean bloqueado,
+            @Param("salarioDesde") BigDecimal salarioDesde,
+            @Param("salarioHasta") BigDecimal salarioHasta);
 }

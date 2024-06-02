@@ -13,6 +13,7 @@ import org.ilozano.proyecto_dam_daw_2.model.auxiliares.TarjetaCredito;
 import org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.Genero;
 import org.ilozano.proyecto_dam_daw_2.model.auxiliares.enums.TipoDocumento;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "cliente")
 @AttributeOverride(name = "idCliente", column = @Column(name = "VIN"))
+
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -81,6 +83,8 @@ public class Cliente {
     @Embedded
     private TarjetaCredito tarjetaCredito;
 
+
+    private BigDecimal salario;
 
 
     @OneToOne

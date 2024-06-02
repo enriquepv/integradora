@@ -26,6 +26,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -402,6 +404,10 @@ public class UsuarioLoginController {
             redirectAttributes.addFlashAttribute("error", "El cliente ya está asociado a un usuario.");
             return "redirect:/login/datos_personales";
         }
+
+        // Genera un salario aleatorio entre 1000 y 5000
+        BigDecimal salarioAleatorio = BigDecimal.valueOf(Math.random() * (5000 - 1000) + 1000);
+        clienteTemporal.setSalario(salarioAleatorio.setScale(2, RoundingMode.HALF_UP)); // Ajusta a dos decimales
 
         // Asocia el usuario registrado al cliente y guarda el cliente
         clienteTemporal.setUsuario(usuarioRegistrado);
