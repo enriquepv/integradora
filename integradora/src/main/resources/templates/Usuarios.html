@@ -159,7 +159,7 @@
                         var row = "<tr>";
                         row += "<td>" + user.email + "</td>"; // Asumiendo que el objeto de usuario tiene una propiedad 'email'
                         row += "<td class='" + (user.bloqueado ? "blocked" : "unblocked") + "'>" + (user.bloqueado ? "Bloqueado" : "Desbloqueado") + "</td>"; // Asignando clases 'blocked' y 'unblocked'
-                        row += "<td>" + user.motivoBloqueo + "</td>";
+                        row += "<td>" + (user.motivoBloqueo ? user.motivoBloqueo : "") + "</td>"; // Mostrar vacío si motivoBloqueo es null
                         row += "<td class='" + (user.bajaLogica ? "baja" : "no-baja") + "'>" + (user.bajaLogica ? "Sí" : "No") + "</td>"; // Asignando clases 'baja' y 'no-baja'
                         row += "<td>" + getCookieValue("numeroDeInicios", user.email) + "</td>"; // Obtener contador de inicio de sesión por email
                         row += "</tr>";

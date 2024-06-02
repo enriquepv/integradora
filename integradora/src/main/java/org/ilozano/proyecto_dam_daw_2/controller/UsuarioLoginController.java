@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/login")
 public class UsuarioLoginController {
-    String EMAIL;
     int intentosClave = 1;
     @Autowired
     private UsuarioService usuarioService;
@@ -80,8 +79,8 @@ public class UsuarioLoginController {
             return "LoginPaso1";
         }
 
-        EMAIL = usuario.getEmail();
-        Usuario usuarioRegistrado = usuarioService.buscarUsuarioPorEmail(EMAIL);
+        String email = usuario.getEmail();
+        Usuario usuarioRegistrado = usuarioService.buscarUsuarioPorEmail(email);
 
         if (usuarioRegistrado == null || usuarioRegistrado.isBajaLogica()) {
             model.addAttribute("error", "El usuario no existe.");
@@ -92,6 +91,8 @@ public class UsuarioLoginController {
             model.addAttribute("error", "Su cuenta está bloqueada. Motivo: " + usuarioRegistrado.getMotivoBloqueo());
             return "LoginPaso1";
         }
+
+        session.setAttribute("usuarioEmail", email); // Guardar email en la sesión
 
         session.setAttribute("usuario", usuarioRegistrado);
         session.setAttribute("paginasVisitadas", 0); // Iniciar contador de páginas visitadas
@@ -118,22 +119,34 @@ public class UsuarioLoginController {
         response.addCookie(cookie);
     }
     @GetMapping("/recuperar")
-    public String mostrarFormularioRecuperacion(Model model) {
-        model.addAttribute("email", ""); // Inicializa el modelo con un campo para el email
+    public String mostrarFormularioRecuperacion(HttpSession session, Model model) {
+        String email = (String) session.getAttribute("usuarioEmail");
+        model.addAttribute("email", email != null ? email : ""); // Inicializa el modelo con el email si está presente
 
         // Obtener la pregunta de recuperación del usuario por email
-        String preguntaRecuperacion = usuarioService.obtenerPreguntaRecuperacion(EMAIL);
+        String preguntaRecuperacion = usuarioService.obtenerPreguntaRecuperacion(email);
         model.addAttribute("preguntaRecuperacion", preguntaRecuperacion);
 
         return "RecuperarPregunta";
     }
 
+
+
     @PostMapping("/recuperar")
     @ResponseBody
-    public ResponseEntity<String> procesarRecuperacionContrasena(@RequestParam("respuesta") String respuesta) {
+    public ResponseEntity<String> procesarRecuperacionContrasena(HttpSession session,
+                                                                 @RequestParam("respuesta") String respuesta) {
+        // Obtener el email desde la sesión
+        String email = (String) session.getAttribute("usuarioEmail");
+
+        if (email == null) {
+            // Manejar el caso en que no hay email en la sesión (debería validar antes)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+
         // Verificar si la respuesta de recuperación es correcta
-        if (usuarioService.verificarRespuestaRecuperacion(EMAIL, respuesta)) {
-            Usuario usuario = usuarioService.buscarUsuarioPorEmail(EMAIL);
+        if (usuarioService.verificarRespuestaRecuperacion(email, respuesta)) {
+            Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
             if (usuario != null) {
                 return ResponseEntity.ok("La contraseña es: " + usuario.getClave());
             } else {
@@ -143,6 +156,7 @@ public class UsuarioLoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Respuesta incorrecta.");
         }
     }
+
 
     //-----------------------------------LÓGICA DE COOKIES-------------------------------------
 
