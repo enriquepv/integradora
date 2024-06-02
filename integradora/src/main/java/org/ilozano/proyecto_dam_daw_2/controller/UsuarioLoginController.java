@@ -88,7 +88,7 @@ public class UsuarioLoginController {
         }
 
         if (usuarioRegistrado.isBloqueado()) {
-            model.addAttribute("error", "Su cuenta está bloqueada. Motivo: " + usuarioRegistrado.getMotivoBloqueo());
+            model.addAttribute("error", "Su cuenta está bloqueada. Motivo: " + usuarioRegistrado.getMotivoBloqueo() + " Hasta: " + usuarioRegistrado.getFechaDesbloqueo());
             return "LoginPaso1";
         }
 

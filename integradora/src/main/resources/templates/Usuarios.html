@@ -20,6 +20,8 @@
     <input type="text" id="blockUsername" name="blockUsername">
     <label for="blockReason">Motivo:</label>
     <input type="text" id="blockReason" name="blockReason">
+    <label for="blockFecha">Fecha de Desbloqueo (YYYY-MM-DD):</label>
+    <input type="text" id="blockFecha" name="blockFecha">
     <button type="submit" id="blockBtn" style="background-color: skyblue">Bloquear</button>
     <button type="button" id="unblockBtn" style="background-color: skyblue">Desbloquear</button>
 </form>
@@ -40,9 +42,10 @@
     <tr>
         <th>Nombre de Usuario</th>
         <th>Estado de Bloqueo</th>
-        <th>Motivo de bloqueo</th>
+        <th>Motivo de Bloqueo</th>
+        <th>Fecha de Desbloqueo</th>
         <th>Baja Lógica</th>
-        <th>Contador de inicios de sesion</th>
+        <th>Contador de inicios de sesión</th>
     </tr>
     </thead>
     <tbody>
@@ -63,13 +66,14 @@
             var email = $("#blockUsername").val();
             var isBlocked = true;
             var motivoBloqueo = $("#blockReason").val();
+            var fechaDesbloqueo = $("#blockFecha").val();
 
             // Realizar solicitud Ajax para bloquear usuario
             $.ajax({
                 url: "/api/bloquear-usuario",
                 method: "POST",
                 contentType: "application/json",
-                data: JSON.stringify({ email: email, bloqueado: isBlocked, motivoBloqueo: motivoBloqueo }),
+                data: JSON.stringify({ email: email, bloqueado: isBlocked, motivoBloqueo: motivoBloqueo, fechaDesbloqueo: fechaDesbloqueo }),
                 success: function(response) {
                     alert("Usuario bloqueado con éxito");
                     loadUsers(); // Recargar la lista de usuarios
@@ -159,7 +163,8 @@
                         var row = "<tr>";
                         row += "<td>" + user.email + "</td>"; // Asumiendo que el objeto de usuario tiene una propiedad 'email'
                         row += "<td class='" + (user.bloqueado ? "blocked" : "unblocked") + "'>" + (user.bloqueado ? "Bloqueado" : "Desbloqueado") + "</td>"; // Asignando clases 'blocked' y 'unblocked'
-                        row += "<td>" + (user.motivoBloqueo ? user.motivoBloqueo : "") + "</td>"; // Mostrar vacío si motivoBloqueo es null
+                        row += "<td>" + (user.motivoBloqueo ? user.motivoBloqueo : "") + "</td>"; // Mostrar motivo de bloqueo o vacío si es null
+                        row += "<td>" + (user.fechaDesbloqueo ? user.fechaDesbloqueo : "") + "</td>"; // Mostrar fecha de desbloqueo si está definida
                         row += "<td class='" + (user.bajaLogica ? "baja" : "no-baja") + "'>" + (user.bajaLogica ? "Sí" : "No") + "</td>"; // Asignando clases 'baja' y 'no-baja'
                         row += "<td>" + getCookieValue("numeroDeInicios", user.email) + "</td>"; // Obtener contador de inicio de sesión por email
                         row += "</tr>";
@@ -194,6 +199,6 @@
         }
     });
 </script>
-
 </body>
 </html>
+

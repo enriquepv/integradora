@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,6 +39,20 @@ public class ApiRest {
 
             usuario.setBloqueado(request.isBloqueado());
             usuario.setMotivoBloqueo(request.getMotivoBloqueo());
+
+            // Establecer la fecha de desbloqueo si el usuario se está bloqueando
+            if (request.isBloqueado()) {
+                String fechaDesbloqueoStr = request.getFechaDesbloqueo();
+                if (fechaDesbloqueoStr != null && !fechaDesbloqueoStr.isEmpty()) {
+                    LocalDate fechaDesbloqueo = LocalDate.parse(fechaDesbloqueoStr); // Convertir la cadena a LocalDate
+                    usuario.setFechaDesbloqueo(fechaDesbloqueo);
+                } else {
+                    usuario.setFechaDesbloqueo(null); // Establecer null si la cadena de fecha está vacía
+                }
+            } else {
+                usuario.setFechaDesbloqueo(null); // Reiniciar la fecha de desbloqueo si se está desbloqueando
+            }
+
             usuarioService.guardarUsuario(usuario);
 
             return ResponseEntity.ok("Operación exitosa");
@@ -45,6 +60,11 @@ public class ApiRest {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud: " + e.getMessage());
         }
     }
+
+
+
+
+
 
     @PostMapping("/dar-baja-usuario")
     public ResponseEntity<?> darBajaUsuario(@RequestBody DarBajaUsuarioRequest request) {
